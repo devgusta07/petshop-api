@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  petshopdb:
+    image: postgres:18-alpine
+    container_name: petshopdb
+    environment:
+      POSTGRES_DB: petshopdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5433:5432"
+    volumes:
+      - pgdata_petshop:/var/lib/postgressql/data
+    networks:
+      - petshop-net
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin_petshop
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "15433:80"
+    networks:
+      - petshop-net
+    depends_on:
+      - petshopdb
+
+volumes:
+  pgdata_petshop:
+
+networks:
+  petshop-net:
+    driver: bridge
+
+
+#docker compose up -d
