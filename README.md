@@ -1,6 +1,6 @@
 # Petshop API
 
-API REST para gerenciamento de uma clínica veterinária, desenvolvida com Java e Spring Boot.
+API REST baseada em um cenario de uma clínica veterinária, desenvolvida com Java e Spring Boot.
 
 O sistema permite cadastrar tutores e animais e gerenciar agendamentos de serviços veterinários.
 
