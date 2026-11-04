@@ -35,3 +35,5 @@ build/
 ## lista.stream()
    #     .map(item -> transformação)
    #     .toList();
+
+src/main/resources/certs/private.key

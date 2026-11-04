@@ -30,34 +30,6 @@ public class TutorService {
     }
 
 
-    //salvar tutor
-
-    public TutorResponseDTO salvarTutor(TutorRequestDTO dto) {
-
-        if (tutorRepository.existsByContato(dto.contato())) {
-
-            throw new RecursoJaExistenteException(
-                    "Já existe um tutor cadastrado com este contato!"
-            );
-        }
-
-        Tutor tutor = new Tutor();
-        tutor.setNome(dto.nome());
-        tutor.setContato(dto.contato());
-        tutor.setEndereco(dto.endereco());
-
-        tutorRepository.save(tutor);
-
-        return new TutorResponseDTO(
-                tutor.getId(),
-                tutor.getNome(),
-                tutor.getContato(),
-                tutor.getEndereco()
-        );
-    }
-
-
-    //Buscar tutor por id
 
     public TutorResponseDTO buscarTutorPorId(Integer id_tutor) {
 
@@ -75,14 +47,13 @@ public class TutorService {
     }
 
 
-    //Buscar tutor por contato
 
-    public TutorResponseDTO buscarPorContato(String contato) {
+    public TutorResponseDTO buscarPorContato(String cpf) {
 
-        Tutor tutorEncontrado = tutorRepository.findByContato(contato)
+        Tutor tutorEncontrado = tutorRepository.findByCpf(cpf)
                 .orElseThrow(() ->
                         new RecursoNaoEncontradoException(
-                                "Tutor não encontrado com o número: " + contato
+                                "Tutor não encontrado!"
                         ));
 
         return new TutorResponseDTO(
@@ -124,36 +95,6 @@ public class TutorService {
         return new RemocaoTutor(
                 "Tutor " + tutorExistente.nome() + ", removido com sucesso"
         );
-
-    }
-
-
-    // Atualizar dados do Tutor
-
-    public TutorResponseDTO updateTutor(Integer id_tutor, TutorRequestDTO updateTutor){
-
-        Tutor tutorEntidade = buscarEntidade(id_tutor);
-
-        if(!tutorEntidade.getContato().equals(updateTutor.contato())
-            && tutorRepository.existsByContato(updateTutor.contato())) {
-
-            throw new RecursoJaExistenteException(
-                    "Já existe outro tutor cadastrado com esse contato!"
-            );
-        }
-
-        tutorEntidade.setNome(updateTutor.nome());
-        tutorEntidade.setContato(updateTutor.contato());
-        tutorEntidade.setEndereco(updateTutor.endereco());
-
-         tutorRepository.save(tutorEntidade);
-
-         return new TutorResponseDTO(
-                 tutorEntidade.getId(),
-                 tutorEntidade.getNome(),
-                 tutorEntidade.getContato(),
-                 tutorEntidade.getEndereco()
-         );
 
     }
 

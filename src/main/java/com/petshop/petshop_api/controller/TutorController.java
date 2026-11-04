@@ -22,13 +22,6 @@ public class TutorController {
         this.tutorService = tutorService;
     }
 
-    @PostMapping("/salvarTutor")
-    public TutorResponseDTO salvarTutor(
-            @Valid @RequestBody TutorRequestDTO dto){
-
-        return tutorService.salvarTutor(dto);
-
-    }
 
     @GetMapping("/buscarPorId/{id}")
     public TutorResponseDTO buscarTutorPorId(
@@ -51,15 +44,6 @@ public class TutorController {
             @PathVariable Integer id){
 
         return tutorService.removerPorId(id);
-
-    }
-
-    @PutMapping("/update/{id}")
-    public TutorResponseDTO updateTutor(
-            @PathVariable Integer id,
-            @Valid @RequestBody TutorRequestDTO updateTutor){
-
-        return tutorService.updateTutor(id, updateTutor);
 
     }
 

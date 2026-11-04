@@ -12,3 +12,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  public-key: classpath:certs/public.key
+  private-key: classpath:certs/private.key

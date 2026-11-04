@@ -7,7 +7,9 @@ import java.util.Optional;
 
 public interface TutorRepository extends JpaRepository<Tutor, Integer> {
 
-    boolean existsByContato(String contado);
+    boolean existsByCpf(String cpf);
 
-    Optional<Tutor> findByContato(String contato);
+    Optional<Tutor> findByCpf(String cpf);
+
+
 }
