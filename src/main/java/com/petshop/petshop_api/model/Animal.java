@@ -52,7 +52,8 @@ public class Animal {
     @OneToMany(mappedBy = "animal")
     List<Agendamento> agendamentos = new ArrayList<>();
 
-    public Animal(String raca, double peso, Tutor tutor) {
+    public Animal(String nome,String raca, double peso, Tutor tutor) {
+        this.nome = nome;
         this.raca = raca;
         this.peso = peso;
         this.tutor = tutor;

@@ -2,12 +2,17 @@ package com.petshop.petshop_api.controller;
 
 import com.petshop.petshop_api.dto.request.animal.AnimalRequestDTO;
 import com.petshop.petshop_api.dto.response.animal.AnimalResponseDTO;
+import com.petshop.petshop_api.dto.response.animal.AnimalTutorResponseDTO;
 import com.petshop.petshop_api.dto.response.animal.RemocaoAnimal;
 import com.petshop.petshop_api.dto.response.tutor.TutorResponseDTO;
 import com.petshop.petshop_api.model.Animal;
 import com.petshop.petshop_api.model.Tutor;
 import com.petshop.petshop_api.service.AnimalService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,42 +26,44 @@ public class AnimalController {
     }
 
     @PostMapping("/salvarAnimal")
-    public AnimalResponseDTO salvarAnimal(
-            @Valid @RequestBody AnimalRequestDTO dto){
+    public ResponseEntity<AnimalResponseDTO> salvarAnimal(
+            @Valid @RequestBody AnimalRequestDTO dto, @AuthenticationPrincipal Jwt jwt){
 
-        return animalService.salvarAnimal(dto);
+        Integer id_Tutor = Integer.parseInt(jwt.getSubject());
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(animalService.salvarAnimal(dto, id_Tutor));
     }
 
-    @GetMapping("/buscarAnimal/{id}")
-    public AnimalResponseDTO buscarAnimal(
-            @PathVariable Integer id){
+    @GetMapping("/buscarAnimal")
+    public ResponseEntity<AnimalResponseDTO> buscarAnimal(
+            @RequestBody String nome, @AuthenticationPrincipal Jwt jwt){
 
-        return animalService.buscarAnimalPorId(id);
+        Integer id_Tutor = Integer.parseInt(jwt.getSubject());
+
+        return ResponseEntity.ok(animalService.buscarAnimal(nome ,id_Tutor));
 
     }
 
     @DeleteMapping("/removerAnimal/{id}")
-    public RemocaoAnimal removerAnimal(
-            @PathVariable Integer id){
+    public ResponseEntity<RemocaoAnimal> removerAnimal(
+            @PathVariable Integer id_animal, @AuthenticationPrincipal Jwt jwt){
 
-        return animalService.removerAnimal(id);
+        Integer id_Tutor = Integer.parseInt(jwt.getSubject());
+
+        return ResponseEntity.ok(animalService.removerAnimal(id_animal, id_Tutor));
 
     }
 
     @PutMapping("/update/{id}")
-    public AnimalResponseDTO updateAnimal(
-            @PathVariable Integer id,
+    public ResponseEntity<AnimalResponseDTO> updateAnimal(
+            @PathVariable Integer id_animal,
+            @AuthenticationPrincipal Jwt jwt,
             @RequestBody AnimalRequestDTO updateAnimal){
 
-        return animalService.updateAnimal(id, updateAnimal);
+        Integer id_Tutor = Integer.parseInt(jwt.getSubject());
+
+        return ResponseEntity.ok(animalService.updateAnimal(id_animal, id_Tutor, updateAnimal));
 
     }
 
-    @GetMapping("/buscarTutor/{id}")
-    public TutorResponseDTO buscarTutor(
-            @PathVariable Integer id){
-
-        return animalService.buscarTutorAnimal(id);
-
-    }
 }

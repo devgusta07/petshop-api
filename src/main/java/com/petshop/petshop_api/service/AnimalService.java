@@ -23,11 +23,10 @@ public class AnimalService {
     }
 
 
-    // Salvar animal
 
-    public AnimalResponseDTO salvarAnimal(AnimalRequestDTO dto){
+    public AnimalResponseDTO salvarAnimal(AnimalRequestDTO dto, Integer id_Tutor) {
 
-        Tutor tutor = tutorRepository.findById(dto.idTutor())
+        Tutor tutor = tutorRepository.findById(id_Tutor)
                 .orElseThrow(() -> new RecursoNaoEncontradoException(
                         "Não há tutor cadastrado com esse id"
                         ));
@@ -44,63 +43,53 @@ public class AnimalService {
                 animal.getId(),
                 animal.getNome(),
                 animal.getRaca(),
-                animal.getPeso(),
-                animal.getTutor().getId()
+                animal.getPeso()
         );
     }
 
 
-    //Buscar animal
+    public AnimalResponseDTO buscarAnimal(String nome, Integer id_Tutor) {
 
-    public AnimalResponseDTO buscarAnimalPorId(Integer id_Animal){
-
-        Animal animalEncontrado = animalRepository.findById(id_Animal)
+        Animal animalEncontrado = animalRepository.findByNomeAndTutorId(nome, id_Tutor)
                 .orElseThrow(() ->
                         new RecursoNaoEncontradoException(
-                                "Nenhum animal encontrado com o id: " + id_Animal
+                                "Nenhum animal encontrado ou não pertence a este tutor!"
                         ));
 
         return new AnimalResponseDTO(
                 animalEncontrado.getId(),
                 animalEncontrado.getNome(),
                 animalEncontrado.getRaca(),
-                animalEncontrado.getPeso(),
-                animalEncontrado.getTutor().getId()
+                animalEncontrado.getPeso()
         );
     }
 
 
-    //Buscar entidade
+    public RemocaoAnimal removerAnimal(Integer id_animal,Integer id_tutor){
 
-    private Animal entiadeAnimal(Integer id_animal){
-
-        return animalRepository.findById(id_animal)
+        Animal animalEncontrado = animalRepository.findByIdAndTutorId(id_animal, id_tutor)
                 .orElseThrow(() ->
-                    new RecursoNaoEncontradoException(
-                            "Nenhuma animal encontrado com o id: "+ id_animal
-                    ));
-    }
+                        new RecursoNaoEncontradoException(
+                                "Nenhum animal encontrado ou não pertence a este tutor!"
+                        ));
 
-
-    //Remover animal
-
-    public RemocaoAnimal removerAnimal(Integer id_animal){
-
-        Animal animalExistente = entiadeAnimal(id_animal);
-
-        animalRepository.delete(animalExistente);
+        animalRepository.delete(animalEncontrado);
 
          return new RemocaoAnimal(
-                 "Animal removido com sucesso!\n" + animalExistente
+                 "Animal removido com sucesso!"
          );
     }
 
 
-    //Atualizar dados do animal
 
-    public AnimalResponseDTO updateAnimal(Integer id_animal, AnimalRequestDTO updateAnimal){
+    public AnimalResponseDTO updateAnimal(Integer id_animal,Integer id_tutor,
+                                          AnimalRequestDTO updateAnimal){
 
-        Animal animalExistente = entiadeAnimal(id_animal);
+        Animal animalExistente = animalRepository.findByIdAndTutorId(id_animal, id_tutor)
+                .orElseThrow(() ->
+                        new RecursoNaoEncontradoException(
+                                "Nenhum animal encontrado ou não pertence a este tutor!"
+                        ));
 
         animalExistente.setNome(updateAnimal.nome());
         animalExistente.setRaca(updateAnimal.raca());
@@ -112,27 +101,8 @@ public class AnimalService {
                 animalExistente.getId(),
                 animalExistente.getNome(),
                 animalExistente.getRaca(),
-                animalExistente.getPeso(),
-                animalExistente.getTutor().getId()
+                animalExistente.getPeso()
         );
     }
-
-
-    //Buscar tutor vinculado ao  animal
-
-    public TutorResponseDTO buscarTutorAnimal(Integer id_animal){
-
-        Animal animalEncontrado = entiadeAnimal(id_animal);
-
-        Tutor tutorVinculado = animalEncontrado.getTutor();
-
-        return new TutorResponseDTO(
-                tutorVinculado.getId(),
-                tutorVinculado.getNome(),
-                tutorVinculado.getContato(),
-                tutorVinculado.getEndereco()
-        );
-    }
-
 
 }

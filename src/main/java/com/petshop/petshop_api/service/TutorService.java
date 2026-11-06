@@ -30,7 +30,6 @@ public class TutorService {
     }
 
 
-
     public TutorResponseDTO buscarTutorPorId(Integer id_tutor) {
 
         Tutor tutorEncontrado = tutorRepository.findById(id_tutor)
@@ -45,7 +44,6 @@ public class TutorService {
                 tutorEncontrado.getEndereco()
         );
     }
-
 
 
     public TutorResponseDTO buscarPorContato(String cpf) {
@@ -66,7 +64,6 @@ public class TutorService {
     }
 
 
-    //Buscar entidade tutor
 
     private Tutor buscarEntidade(Integer id_tutor) {
         return  tutorRepository.findById(id_tutor)
@@ -76,8 +73,6 @@ public class TutorService {
                 ));
     }
 
-
-    //Remover tutor
 
     public RemocaoTutor removerPorId(Integer id_tuto) {
 
@@ -99,7 +94,6 @@ public class TutorService {
     }
 
 
-    //Animais vinculados ao Tutor
 
     public List<AnimalTutorResponseDTO> animaisVinculados(Integer id_Tutor){
 
