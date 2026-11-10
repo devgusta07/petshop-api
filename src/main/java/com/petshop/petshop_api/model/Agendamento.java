@@ -34,4 +34,8 @@ public class Agendamento {
     @JoinColumn(name = "id_animal")
     private Animal animal;
 
+    @ManyToOne
+    @JoinColumn(name = "id_tutor")
+    private Tutor tutor;
+
 }

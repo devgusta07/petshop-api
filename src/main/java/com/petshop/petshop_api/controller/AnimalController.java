@@ -2,11 +2,6 @@ package com.petshop.petshop_api.controller;
 
 import com.petshop.petshop_api.dto.request.animal.AnimalRequestDTO;
 import com.petshop.petshop_api.dto.response.animal.AnimalResponseDTO;
-import com.petshop.petshop_api.dto.response.animal.AnimalTutorResponseDTO;
-import com.petshop.petshop_api.dto.response.animal.RemocaoAnimal;
-import com.petshop.petshop_api.dto.response.tutor.TutorResponseDTO;
-import com.petshop.petshop_api.model.Animal;
-import com.petshop.petshop_api.model.Tutor;
 import com.petshop.petshop_api.service.AnimalService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -45,13 +40,14 @@ public class AnimalController {
     }
 
     @DeleteMapping("/removerAnimal/{id}")
-    public ResponseEntity<RemocaoAnimal> removerAnimal(
+    public ResponseEntity<Void> removerAnimal(
             @PathVariable Integer id_animal, @AuthenticationPrincipal Jwt jwt){
 
         Integer id_Tutor = Integer.parseInt(jwt.getSubject());
 
-        return ResponseEntity.ok(animalService.removerAnimal(id_animal, id_Tutor));
+         animalService.removerAnimal(id_animal, id_Tutor);
 
+         return ResponseEntity.noContent().build();
     }
 
     @PutMapping("/update/{id}")

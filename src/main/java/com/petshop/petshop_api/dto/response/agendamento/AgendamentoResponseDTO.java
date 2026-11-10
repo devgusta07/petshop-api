@@ -9,5 +9,5 @@ public record AgendamentoResponseDTO(Integer id,
                                      LocalDate data,
                                      LocalTime horario,
                                      TipoServico servico,
-                                     Integer idAnimal) {
+                                     String nome) {
 }

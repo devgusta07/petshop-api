@@ -2,8 +2,6 @@ package com.petshop.petshop_api.service;
 
 import com.petshop.petshop_api.dto.request.animal.AnimalRequestDTO;
 import com.petshop.petshop_api.dto.response.animal.AnimalResponseDTO;
-import com.petshop.petshop_api.dto.response.animal.RemocaoAnimal;
-import com.petshop.petshop_api.dto.response.tutor.TutorResponseDTO;
 import com.petshop.petshop_api.exception.RecursoNaoEncontradoException;
 import com.petshop.petshop_api.model.Animal;
 import com.petshop.petshop_api.model.Tutor;
@@ -65,7 +63,7 @@ public class AnimalService {
     }
 
 
-    public RemocaoAnimal removerAnimal(Integer id_animal,Integer id_tutor){
+    public void removerAnimal(Integer id_animal,Integer id_tutor){
 
         Animal animalEncontrado = animalRepository.findByIdAndTutorId(id_animal, id_tutor)
                 .orElseThrow(() ->
@@ -75,9 +73,6 @@ public class AnimalService {
 
         animalRepository.delete(animalEncontrado);
 
-         return new RemocaoAnimal(
-                 "Animal removido com sucesso!"
-         );
     }
 
 

@@ -2,11 +2,15 @@ package com.petshop.petshop_api.controller;
 
 import com.petshop.petshop_api.dto.request.agendamento.AgendamentoRequestDTO;
 import com.petshop.petshop_api.dto.response.agendamento.AgendamentoResponseDTO;
-import com.petshop.petshop_api.dto.response.agendamento.RemocaoAgendamento;
-import com.petshop.petshop_api.model.Agendamento;
 import com.petshop.petshop_api.service.AgendamentoService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/agendamento")
@@ -18,36 +22,48 @@ public class AgendamentoController {
         this.agendamentoService = agendamentoService;
     }
 
-    @PostMapping("/salvarAgendamento")
-    public AgendamentoResponseDTO salvarAgendamento(
-            @Valid @RequestBody AgendamentoRequestDTO agendamento){
+    @PostMapping("/realizarAgendamento")
+    public ResponseEntity<AgendamentoResponseDTO> realizarAgendamento(
+            @Valid @RequestBody AgendamentoRequestDTO agendamento,
+            @AuthenticationPrincipal Jwt jwt){
 
-        return agendamentoService.realizarAgendamento(agendamento);
+        Integer idTutor = Integer.parseInt(jwt.getSubject());
 
+
+        return ResponseEntity.status(HttpStatus.CREATED).body( agendamentoService.realizarAgendamento(
+                agendamento, idTutor));
     }
 
-    @GetMapping("/buscarAgendamento/{id}")
-    public AgendamentoResponseDTO buscarAgendamento(
-            @PathVariable Integer id){
+    @GetMapping("/agendamentos")
+    public ResponseEntity<List<AgendamentoResponseDTO>> agendamentos(
+            @AuthenticationPrincipal Jwt jwt){
 
-        return agendamentoService.buscarPorId(id);
+        Integer idTutor = Integer.parseInt(jwt.getSubject());
 
+        return ResponseEntity.status(HttpStatus.OK).body(agendamentoService.agendamentos(idTutor));
     }
 
     @PutMapping("/updateAgendamento/{id}")
-    public AgendamentoResponseDTO updateAgendamento(
+    public ResponseEntity<AgendamentoResponseDTO> updateAgendamento(
             @PathVariable Integer id,
-            @Valid @RequestBody AgendamentoRequestDTO updateAgendamento){
+            @Valid @RequestBody AgendamentoRequestDTO updateAgendamento,
+            @AuthenticationPrincipal Jwt jwt){
 
-        return agendamentoService.update(id, updateAgendamento);
+        Integer idTutor = Integer.parseInt(jwt.getSubject());
+
+        return ResponseEntity.ok(agendamentoService.update(id, updateAgendamento, idTutor));
 
     }
 
     @DeleteMapping("/removerAgendamento/{id}")
-    public RemocaoAgendamento removerAgendamento(
-            @PathVariable Integer id){
+    public ResponseEntity<Void> removerAgendamento(
+            @PathVariable Integer idAgendamento,
+        @AuthenticationPrincipal Jwt jwt){
 
-        return agendamentoService.removerPorId(id);
+        Integer idTutor = Integer.parseInt(jwt.getSubject());
 
+         agendamentoService.removerPorId(idAgendamento, idTutor);
+
+         return ResponseEntity.noContent().build();
     }
 }

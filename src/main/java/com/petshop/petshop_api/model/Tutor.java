@@ -58,6 +58,9 @@ public class Tutor {
     )
     private Set<Roles> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "tutor")
+    private List<Agendamento> agendamento;
+
     public Tutor(String nome, String contato, String endereco) {
         this.nome = nome;
         this.contato = contato;

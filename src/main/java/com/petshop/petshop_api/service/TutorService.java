@@ -94,7 +94,6 @@ public class TutorService {
     }
 
 
-
     public List<AnimalTutorResponseDTO> animaisVinculados(Integer id_Tutor){
 
         Tutor tutorExistente = buscarEntidade(id_Tutor);
