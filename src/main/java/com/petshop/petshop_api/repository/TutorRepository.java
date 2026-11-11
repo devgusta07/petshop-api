@@ -11,5 +11,7 @@ public interface TutorRepository extends JpaRepository<Tutor, Integer> {
 
     Optional<Tutor> findByCpf(String cpf);
 
+    void deleteByCpf(String cpf);
+
 
 }

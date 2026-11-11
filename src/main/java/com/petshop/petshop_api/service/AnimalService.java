@@ -38,7 +38,6 @@ public class AnimalService {
         animalRepository.save(animal);
 
         return new AnimalResponseDTO(
-                animal.getId(),
                 animal.getNome(),
                 animal.getRaca(),
                 animal.getPeso()
@@ -55,7 +54,6 @@ public class AnimalService {
                         ));
 
         return new AnimalResponseDTO(
-                animalEncontrado.getId(),
                 animalEncontrado.getNome(),
                 animalEncontrado.getRaca(),
                 animalEncontrado.getPeso()
@@ -93,7 +91,6 @@ public class AnimalService {
         animalRepository.save(animalExistente);
 
         return new AnimalResponseDTO(
-                animalExistente.getId(),
                 animalExistente.getNome(),
                 animalExistente.getRaca(),
                 animalExistente.getPeso()

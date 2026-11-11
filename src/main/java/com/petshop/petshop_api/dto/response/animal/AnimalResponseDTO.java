@@ -1,7 +1,6 @@
 package com.petshop.petshop_api.dto.response.animal;
 
-public record AnimalResponseDTO(Integer id,
-                                String nome,
+public record AnimalResponseDTO(String nome,
                                 String raca,
                                 double peso) {
 }

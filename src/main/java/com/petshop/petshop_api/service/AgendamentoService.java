@@ -110,16 +110,6 @@ public class AgendamentoService {
     }
 
 
-    private Agendamento buscarEntidade(Integer id){
-
-        return  agendamentoRepository.findById(id)
-                .orElseThrow(() ->
-                        new RecursoNaoEncontradoException(
-                                "Agendamento não encontrada com o id: "+id
-                        ));
-    }
-
-
     public AgendamentoResponseDTO update(Integer idAgendamento, AgendamentoRequestDTO update, Integer idTutor){
 
         var agendamentoExistente = agendamentoRepository.findByIdAndTutorId(idAgendamento, idTutor)
@@ -153,10 +143,60 @@ public class AgendamentoService {
 
     }
 
+    //Funções para ADMIN
 
-    public void removerPorId(Integer idAgendamento, Integer idTutor){
+    public List<AgendamentoResponseDTO> agendamentosAdmin(String cpf){
 
-        var agendamento = agendamentoRepository.findByIdAndTutorId(idAgendamento, idTutor)
+        List<Agendamento> agendamentos = agendamentoRepository.
+                findByTutorCpfOrderByDataAscHorarioAsc(cpf);
+
+        return agendamentos.stream()
+                .map(agendamento -> new AgendamentoResponseDTO(
+                        agendamento.getId(),
+                        agendamento.getData(),
+                        agendamento.getHorario(),
+                        agendamento.getTipoServico(),
+                        agendamento.getAnimal().getNome()
+                ))
+                .toList();
+    }
+
+    public AgendamentoResponseDTO updateAdmin(String cpf, AgendamentoRequestDTO update, Integer idAgendamento){
+
+        var agendamentoExistente = agendamentoRepository.findByIdAndTutorCpf(idAgendamento, cpf)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Agendamento não existente ou não pertence a esse tutor"
+                ));
+
+        var animal = animalRepository.findByIdAndTutorCpf(update.idAnimal(), cpf)
+                .orElseThrow(() ->
+                        new RecursoNaoEncontradoException(
+                                "Animal não encontro ou não pertence a esse tutor"
+                        ));
+
+
+        agendamentoExistente.setData(update.data());
+        agendamentoExistente.setHorario(update.horario());
+        agendamentoExistente.setTipoServico(update.servico());
+        agendamentoExistente.setAnimal(animal);
+
+        verificarConflito(agendamentoExistente);
+
+        agendamentoRepository.save(agendamentoExistente);
+
+        return new AgendamentoResponseDTO(
+                agendamentoExistente.getId(),
+                agendamentoExistente.getData(),
+                agendamentoExistente.getHorario(),
+                agendamentoExistente.getTipoServico(),
+                agendamentoExistente.getAnimal().getNome()
+        );
+
+    }
+
+    public void removerPorIdAdmin(Integer idAgendamento, String cpf){
+
+        var agendamento = agendamentoRepository.findByIdAndTutorCpf(idAgendamento, cpf)
                 .orElseThrow(() -> new RecursoNaoEncontradoException(
                         "Agendamento não encontrado ou não pertence a esse tutor"
                 ));
@@ -164,4 +204,7 @@ public class AgendamentoService {
         agendamentoRepository.delete(agendamento);
 
     }
+
+
+
 }

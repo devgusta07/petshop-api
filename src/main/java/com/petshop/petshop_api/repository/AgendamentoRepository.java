@@ -17,4 +17,10 @@ public interface AgendamentoRepository extends JpaRepository<Agendamento, Intege
     List<Agendamento> findByTutorIdOrderByDataAscHorarioAsc(Integer idTutor);
 
     Optional<Agendamento> findByIdAndTutorId(Integer id_agendamento, Integer id_tutor);
+
+    boolean existsByTutorId(Integer idTutor);
+
+    List<Agendamento> findByTutorCpfOrderByDataAscHorarioAsc(String cpf);
+
+    Optional<Agendamento> findByIdAndTutorCpf(Integer id_agendamento, String cpf);
 }

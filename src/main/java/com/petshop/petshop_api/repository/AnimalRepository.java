@@ -13,4 +13,6 @@ public interface AnimalRepository extends JpaRepository<Animal, Integer> {
 
     Optional<Animal> findByIdAndTutorId(Integer id_animal, Integer id_tutor);
 
+    Optional<Animal> findByIdAndTutorCpf(Integer id_animal, String cpf);
+
 }
