@@ -49,10 +49,10 @@ public class CreatService {
         tutorRepository.save(tutor);
 
         return new TutorResponseDTO(
-                tutor.getId(),
                 tutor.getNome(),
                 tutor.getContato(),
-                tutor.getEndereco()
+                tutor.getEndereco(),
+                tutor.getCpf()
         );
 
     }

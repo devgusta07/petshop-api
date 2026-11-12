@@ -1,8 +1,10 @@
 package com.petshop.petshop_api.controller;
 
+import com.petshop.petshop_api.dto.request.agendamento.AgendamentoRequestDTO;
+import com.petshop.petshop_api.dto.response.agendamento.AgendamentoResponseDTO;
 import com.petshop.petshop_api.dto.response.animal.AnimalTutorResponseDTO;
-import com.petshop.petshop_api.dto.response.tutor.RemocaoTutor;
 import com.petshop.petshop_api.dto.response.tutor.TutorResponseDTO;
+import com.petshop.petshop_api.service.AgendamentoService;
 import com.petshop.petshop_api.service.TutorService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,9 +16,11 @@ import java.util.List;
 public class AdminController {
 
     private final TutorService tutorService;
+    private final AgendamentoService agendamentoService;
 
-    public AdminController(TutorService tutorService) {
+    public AdminController(TutorService tutorService,  AgendamentoService agendamentoService) {
         this.tutorService = tutorService;
+        this.agendamentoService = agendamentoService;
     }
 
 
@@ -44,5 +48,30 @@ public class AdminController {
 
         return ResponseEntity.ok(tutorService.animaisVinculados(cpf));
 
+    }
+
+    @GetMapping("/agendamentos/{cpf}")
+    public ResponseEntity<List<AgendamentoResponseDTO>> agendamentos(
+            @PathVariable String cpf
+    ){
+
+        return ResponseEntity.ok(agendamentoService.agendamentosAdmin(cpf));
+    }
+
+    @PutMapping("/update/{cpf}/{id}")
+    public ResponseEntity<AgendamentoResponseDTO> update(@PathVariable String cpf,
+                                                         @PathVariable Integer id,
+                                                         @RequestBody AgendamentoRequestDTO dto){
+
+        return ResponseEntity.ok(agendamentoService.updateAdmin(cpf, dto, id));
+
+    }
+
+    @DeleteMapping("/remover/{id}/{cpf}")
+    public ResponseEntity<Void> remover(@PathVariable Integer id,
+                                        @PathVariable String cpf){
+
+        agendamentoService.removerPorCpfIdAdmin(id, cpf);
+        return ResponseEntity.noContent().build();
     }
 }

@@ -1,11 +1,8 @@
 package com.petshop.petshop_api.service;
 
 import com.petshop.petshop_api.dto.response.animal.AnimalTutorResponseDTO;
-import com.petshop.petshop_api.dto.response.tutor.RemocaoTutor;
-import com.petshop.petshop_api.dto.request.tutor.TutorRequestDTO;
 import com.petshop.petshop_api.dto.response.tutor.TutorResponseDTO;
 import com.petshop.petshop_api.exception.RecursoEmUsoException;
-import com.petshop.petshop_api.exception.RecursoJaExistenteException;
 import com.petshop.petshop_api.exception.RecursoNaoEncontradoException;
 import com.petshop.petshop_api.model.Animal;
 import com.petshop.petshop_api.model.Tutor;

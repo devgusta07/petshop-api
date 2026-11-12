@@ -142,6 +142,16 @@ public class AgendamentoService {
         );
 
     }
+    public void removerPorId(Integer idAgendamento, Integer idTutor){
+
+        var agendamento = agendamentoRepository.findByIdAndTutorId(idAgendamento, idTutor)
+                .orElseThrow(() -> new RecursoNaoEncontradoException(
+                        "Agendamento não encontrado ou não pertence a esse tutor"
+                ));
+
+        agendamentoRepository.delete(agendamento);
+
+    }
 
     //Funções para ADMIN
 
@@ -194,7 +204,7 @@ public class AgendamentoService {
 
     }
 
-    public void removerPorIdAdmin(Integer idAgendamento, String cpf){
+    public void removerPorCpfIdAdmin(Integer idAgendamento, String cpf){
 
         var agendamento = agendamentoRepository.findByIdAndTutorCpf(idAgendamento, cpf)
                 .orElseThrow(() -> new RecursoNaoEncontradoException(
